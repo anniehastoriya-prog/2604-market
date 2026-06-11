@@ -1,5 +1,10 @@
 import db from "#db/client";
 
+import { createOrder } from "#db/queries/orders";
+import { createOrderProduct } from "#db/queries/orders_products";
+import { createProduct } from "#db/queries/products";
+import { createUser } from "#db/queries/users";
+
 await db.connect();
 await seed();
 await db.end();
