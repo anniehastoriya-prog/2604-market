@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS users;
 
--- TODO
+
 CREATE TABLE users (
   id serial PRIMARY KEY,
   username text UNIQUE NOT NULL,
