@@ -1,19 +1,22 @@
 import db from "#db/client";
 
-export async function createProduct(title, price) {
+//Creates a new product with its title, description of the product, and its price.
+//It is then inserted into the products table.
+export async function createProduct(title, description, price) {
   const sql = `
   INSERT INTO products
-    (title, duration_ms)
+    (title, description, price)
   VALUES
-    ($1, $2)
+    ($1, $2, $3)
   RETURNING *
   `;
   const {
     rows: [product],
-  } = await db.query(sql, [title, price]);
+  } = await db.query(sql, [title, description, price]);
   return product;
 }
 
+//Gets all products from the products table
 export async function getProducts() {
   const sql = `
   SELECT *
@@ -23,19 +26,7 @@ export async function getProducts() {
   return products;
 }
 
-export async function getProductssByOrderId(id) {
-  const sql = `
-  SELECT products.*
-  FROM
-    tracks
-    JOIN orders_products ON orders_products.product_id = products.id
-    JOIN orders ON order.id = orders_products.order_id
-  WHERE orders.id = $1
-  `;
-  const { rows: products } = await db.query(sql, [id]);
-  return products;
-}
-
+//Gets a single product using its ID
 export async function getProductById(id) {
   const sql = `
   SELECT *
@@ -46,4 +37,18 @@ export async function getProductById(id) {
     rows: [product],
   } = await db.query(sql, [id]);
   return product;
+}
+
+//Gets all products associated with a given order ID
+export async function getProductsByOrderId(id) {
+  const sql = `
+  SELECT products.*
+  FROM
+    products
+    JOIN orders_products ON orders_products.product_id = products.id
+    JOIN orders ON orders.id = orders_products.order_id
+  WHERE orders.id = $1
+  `;
+  const { rows: products } = await db.query(sql, [id]);
+  return products;
 }
